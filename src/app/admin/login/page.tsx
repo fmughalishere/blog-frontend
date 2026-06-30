@@ -24,7 +24,9 @@ export default function AdminLoginPage() {
     try {
       const data = await api.post("/auth/login", { email, password });
       if (data.user.role !== "admin") {
-setError("This account is not an admin. Please log in via the user panel.");
+        setError(
+          "This account is not an admin. Please log in via the user panel.",
+        );
         setLoading(false);
         return;
       }
@@ -40,19 +42,28 @@ setError("This account is not an admin. Please log in via the user panel.");
   return (
     <div className="flex min-h-screen items-center justify-center bg-[#12151c] p-6">
       <Card className="w-full max-w-sm p-8">
-        <p className="mb-1 font-mono text-xs uppercase tracking-widest text-primary">Admin panel</p>
+        <p className="mb-1 font-mono text-xs uppercase tracking-widest text-primary">
+          Admin panel
+        </p>
         <h1 className="mb-1 text-xl font-bold">Sign in</h1>
-       <p className="mb-6 text-sm text-muted-foreground">
-  Log in to manage blogs and comments.
-</p>
+        <p className="mb-6 text-sm text-muted-foreground">
+          Log in to manage blogs and comments.
+        </p>
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
             <label className="mb-1.5 block text-sm font-semibold">Email</label>
-            <Input type="email" value={email} onChange={(e) => setEmail(e.target.value)} required />
+            <Input
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+            />
           </div>
           <div>
-            <label className="mb-1.5 block text-sm font-semibold">Password</label>
+            <label className="mb-1.5 block text-sm font-semibold">
+              Password
+            </label>
             <Input
               type="password"
               value={password}
@@ -69,11 +80,11 @@ setError("This account is not an admin. Please log in via the user panel.");
         </form>
 
         <p className="mt-5 text-center text-sm text-muted-foreground">
-  Don't have an admin account?{" "}
-  <Link href="/admin/register" className="font-bold text-primary">
-    Register
-  </Link>
-</p>
+          Don't have an admin account?{" "}
+          <Link href="/admin/register" className="font-bold text-primary">
+            Register
+          </Link>
+        </p>
       </Card>
     </div>
   );
