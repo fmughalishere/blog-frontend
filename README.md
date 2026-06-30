@@ -7,7 +7,7 @@ Standalone Next.js frontend — talks to the separate **Express + TypeScript bac
 ```bash
 npm install
 cp .env.local.example .env.local
-# set NEXT_PUBLIC_API_URL to your Express backend, e.g. http://localhost:5000/api
+# set NEXT_PUBLIC_API_URL to your Express backend, e.g. https://blogs-backend-e4fi.onrender.com/api
 npm run dev
 ```
 
