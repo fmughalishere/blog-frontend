@@ -1,9 +1,6 @@
 export interface CategoryItem {
-  /** Label shown in the UI */
   label: string;
-  /** URL slug, also used as the `category` filter value sent to the API */
   slug: string;
-  /** Short description shown in the mega menu / category page header */
   description: string;
 }
 
