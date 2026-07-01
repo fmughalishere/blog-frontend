@@ -4,6 +4,7 @@ import { useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
+import { api } from "@/lib/api";
 
 interface Props {
   initialValues?: {
@@ -39,9 +40,31 @@ export default function BlogForm({ initialValues, onSubmit, loading, error, subm
     tags: initialValues?.tags || "",
     status: initialValues?.status || "published",
   });
+  const [uploading, setUploading] = useState(false);
+  const [uploadError, setUploadError] = useState("");
 
   function update(key: keyof typeof form, value: string) {
     setForm((f) => ({ ...f, [key]: value }));
+  }
+
+  async function handleFileUpload(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0];
+    e.target.value = ""; // allow re-selecting the same file later
+    if (!file) return;
+
+    setUploadError("");
+    setUploading(true);
+    try {
+      const body = new FormData();
+      body.append("image", file);
+
+      const data = await api.post("/admin/upload", body);
+      update("coverImage", data.url);
+    } catch (err: any) {
+      setUploadError(err.message || "Image upload nahi hui.");
+    } finally {
+      setUploading(false);
+    }
   }
 
   function handleSubmit(e: React.FormEvent) {
@@ -88,12 +111,37 @@ export default function BlogForm({ initialValues, onSubmit, loading, error, subm
       </div>
 
       <div>
-        <label className="mb-1.5 block text-sm font-semibold">Cover image URL</label>
+        <label className="mb-1.5 block text-sm font-semibold">Cover image</label>
+
         <Input
           value={form.coverImage}
           onChange={(e) => update("coverImage", e.target.value)}
           placeholder="https://..."
         />
+
+        <div className="my-2 flex items-center gap-2 text-xs text-muted-foreground">
+          <div className="h-px flex-1 bg-border" />
+          OR
+          <div className="h-px flex-1 bg-border" />
+        </div>
+
+        <label
+          className={`flex h-10 w-full cursor-pointer items-center justify-center rounded-md border border-dashed border-input bg-card text-sm text-muted-foreground hover:bg-secondary ${
+            uploading ? "pointer-events-none opacity-60" : ""
+          }`}
+        >
+          {uploading ? "Uploading..." : "Upload image from device"}
+          <input
+            type="file"
+            accept="image/*"
+            className="hidden"
+            onChange={handleFileUpload}
+            disabled={uploading}
+          />
+        </label>
+
+        {uploadError && <p className="mt-1.5 text-sm text-destructive">{uploadError}</p>}
+
         {form.coverImage && (
           // eslint-disable-next-line @next/next/no-img-element
           <img
@@ -134,7 +182,7 @@ export default function BlogForm({ initialValues, onSubmit, loading, error, subm
 
       {error && <p className="text-sm text-destructive">{error}</p>}
 
-      <Button type="submit" disabled={loading} className="w-full sm:w-auto">
+      <Button type="submit" disabled={loading || uploading} className="w-full sm:w-auto">
         {loading ? "Saving..." : submitLabel}
       </Button>
     </form>

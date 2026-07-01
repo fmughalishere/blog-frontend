@@ -7,14 +7,16 @@ interface RequestOptions extends RequestInit {
 async function request(path: string, options: RequestOptions = {}) {
   const { json, headers, ...rest } = options;
 
+  const isFormData = json instanceof FormData;
+
   const res = await fetch(`${API_URL}${path}`, {
     ...rest,
     credentials: "include",
     headers: {
-      ...(json ? { "Content-Type": "application/json" } : {}),
+      ...(json && !isFormData ? { "Content-Type": "application/json" } : {}),
       ...headers,
     },
-    body: json ? JSON.stringify(json) : rest.body,
+    body: isFormData ? (json as FormData) : json ? JSON.stringify(json) : rest.body,
     cache: "no-store",
   });
 
