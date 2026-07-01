@@ -9,7 +9,7 @@ async function request(path: string, options: RequestOptions = {}) {
 
   const res = await fetch(`${API_URL}${path}`, {
     ...rest,
-    credentials: "include", // sends the httpOnly JWT cookie set by the Express backend
+    credentials: "include",
     headers: {
       ...(json ? { "Content-Type": "application/json" } : {}),
       ...headers,
