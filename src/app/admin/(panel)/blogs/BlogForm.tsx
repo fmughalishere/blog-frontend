@@ -21,13 +21,21 @@ interface Props {
   submitLabel?: string;
 }
 
+const CATEGORIES = [
+  "Personality and Mood Captions",
+  "Relationship Captions",
+  "Food and Lifestyle Captions",
+  "Travel and Nature Captions",
+  "Events and Special Captions",
+];
+
 export default function BlogForm({ initialValues, onSubmit, loading, error, submitLabel = "Save" }: Props) {
   const [form, setForm] = useState({
     title: initialValues?.title || "",
     excerpt: initialValues?.excerpt || "",
     content: initialValues?.content || "",
     coverImage: initialValues?.coverImage || "",
-    category: initialValues?.category || "General",
+    category: initialValues?.category || CATEGORIES[0],
     tags: initialValues?.tags || "",
     status: initialValues?.status || "published",
   });
@@ -54,7 +62,17 @@ export default function BlogForm({ initialValues, onSubmit, loading, error, subm
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
         <div>
           <label className="mb-1.5 block text-sm font-semibold">Category</label>
-          <Input value={form.category} onChange={(e) => update("category", e.target.value)} />
+          <select
+            className="h-10 w-full rounded-md border border-input bg-card px-3 text-sm"
+            value={form.category}
+            onChange={(e) => update("category", e.target.value)}
+          >
+            {CATEGORIES.map((cat) => (
+              <option key={cat} value={cat}>
+                {cat}
+              </option>
+            ))}
+          </select>
         </div>
         <div>
           <label className="mb-1.5 block text-sm font-semibold">Status</label>
