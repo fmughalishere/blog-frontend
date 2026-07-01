@@ -49,7 +49,7 @@ export default function BlogForm({ initialValues, onSubmit, loading, error, subm
 
   async function handleFileUpload(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0];
-    e.target.value = ""; // allow re-selecting the same file later
+    e.target.value = "";
     if (!file) return;
 
     setUploadError("");
@@ -58,7 +58,7 @@ export default function BlogForm({ initialValues, onSubmit, loading, error, subm
       const body = new FormData();
       body.append("image", file);
 
-      const data = await api.post("/admin/upload", body);
+      const data = await api.post("/admin/blogs/upload", body);
       update("coverImage", data.url);
     } catch (err: any) {
       setUploadError(err.message || "Image upload nahi hui.");
