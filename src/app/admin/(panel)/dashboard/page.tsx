@@ -49,38 +49,41 @@ export default function DashboardPage() {
 
   return (
     <div>
-      <div className="mb-6 flex items-end justify-between">
+      <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
         <div>
           <p className="mb-1 font-mono text-xs uppercase tracking-widest text-muted-foreground">
             Overview
           </p>
-          <h1 className="text-2xl font-bold">Dashboard</h1>
+          <h1 className="text-xl font-bold sm:text-2xl">Dashboard</h1>
         </div>
-        <Link href="/admin/blogs/new" className={cn(buttonVariants())}>
+        <Link
+          href="/admin/blogs/new"
+          className={cn(buttonVariants(), "w-full sm:w-auto")}
+        >
           + New blog
         </Link>
       </div>
 
-      <div className="mb-6 grid grid-cols-2 gap-3 md:grid-cols-4">
+      <div className="mb-6 grid grid-cols-2 gap-2.5 sm:gap-3 md:grid-cols-4">
         {cards.map((c) => (
           <Card
             key={c.label}
             className={cn(
-              "p-4",
+              "p-3 sm:p-4",
               c.alert && stats.pending > 0 && "border-amber-400 bg-amber-50",
             )}
           >
-            <span className="mb-2 block text-xs text-muted-foreground">
+            <span className="mb-1.5 block text-[11px] leading-tight text-muted-foreground sm:mb-2 sm:text-xs">
               {c.label}
             </span>
-            <span className="font-mono text-2xl font-bold">
+            <span className="font-mono text-xl font-bold sm:text-2xl">
               {loading ? "—" : String(c.value).padStart(3, "0")}
             </span>
           </Card>
         ))}
       </div>
 
-      <Card className="p-5">
+      <Card className="p-4 sm:p-5">
         <h2 className="mb-3 text-sm font-bold">Recent blogs</h2>
         {loading ? (
           <p className="text-sm text-muted-foreground">Loading...</p>
@@ -92,34 +95,70 @@ export default function DashboardPage() {
             </Link>
           </p>
         ) : (
-          <table className="w-full text-sm">
-            <thead>
-              <tr className="border-b text-left text-xs uppercase text-muted-foreground">
-                <th className="pb-2">Title</th>
-                <th className="pb-2">Status</th>
-                <th className="pb-2">Views</th>
-                <th className="pb-2">Created</th>
-              </tr>
-            </thead>
-            <tbody>
+          <>
+            <div className="flex flex-col gap-3 sm:hidden">
               {recent.map((b) => (
-                <tr key={b._id} className="border-b last:border-0">
-                  <td className="py-2.5">{b.title}</td>
-                  <td className="py-2.5">
+                <div
+                  key={b._id}
+                  className="rounded-lg border p-3 last:mb-0"
+                >
+                  <p className="mb-2 text-sm font-medium leading-snug">
+                    {b.title}
+                  </p>
+                  <div className="flex items-center justify-between">
                     <Badge
-                      variant={b.status === "published" ? "success" : "default"}
+                      variant={
+                        b.status === "published" ? "success" : "default"
+                      }
                     >
                       {b.status}
                     </Badge>
-                  </td>
-                  <td className="py-2.5 font-mono text-xs">{b.views}</td>
-                  <td className="py-2.5 font-mono text-xs">
-                    {new Date(b.createdAt).toLocaleDateString()}
-                  </td>
-                </tr>
+                    <div className="flex items-center gap-3 font-mono text-xs text-muted-foreground">
+                      <span>{b.views} views</span>
+                      <span>
+                        {new Date(b.createdAt).toLocaleDateString()}
+                      </span>
+                    </div>
+                  </div>
+                </div>
               ))}
-            </tbody>
-          </table>
+            </div>
+
+            <div className="hidden overflow-x-auto sm:block">
+              <table className="w-full min-w-[480px] text-sm">
+                <thead>
+                  <tr className="border-b text-left text-xs uppercase text-muted-foreground">
+                    <th className="pb-2">Title</th>
+                    <th className="pb-2">Status</th>
+                    <th className="pb-2">Views</th>
+                    <th className="pb-2">Created</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {recent.map((b) => (
+                    <tr key={b._id} className="border-b last:border-0">
+                      <td className="max-w-[240px] truncate py-2.5">
+                        {b.title}
+                      </td>
+                      <td className="py-2.5">
+                        <Badge
+                          variant={
+                            b.status === "published" ? "success" : "default"
+                          }
+                        >
+                          {b.status}
+                        </Badge>
+                      </td>
+                      <td className="py-2.5 font-mono text-xs">{b.views}</td>
+                      <td className="py-2.5 font-mono text-xs">
+                        {new Date(b.createdAt).toLocaleDateString()}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </>
         )}
       </Card>
     </div>
