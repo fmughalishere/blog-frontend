@@ -51,12 +51,17 @@ export default function AdminBlogsPage() {
 
   return (
     <div>
-      <div className="mb-6 flex items-end justify-between">
+      <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
         <div>
-          <p className="mb-1 font-mono text-xs uppercase tracking-widest text-muted-foreground">Content</p>
-          <h1 className="text-2xl font-bold">Blogs</h1>
+          <p className="mb-1 font-mono text-xs uppercase tracking-widest text-muted-foreground">
+            Content
+          </p>
+          <h1 className="text-xl font-bold sm:text-2xl">Blogs</h1>
         </div>
-        <Link href="/admin/blogs/new" className={cn(buttonVariants())}>
+        <Link
+          href="/admin/blogs/new"
+          className={cn(buttonVariants(), "w-full sm:w-auto")}
+        >
           + New blog
         </Link>
       </div>
@@ -66,62 +71,116 @@ export default function AdminBlogsPage() {
           placeholder="Search by title..."
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          className="max-w-sm"
+          className="max-w-sm sm:max-w-sm"
         />
-        <Button type="submit" variant="outline">
+        <Button type="submit" variant="outline" className="shrink-0">
           Search
         </Button>
       </form>
 
-      <Card className="p-5">
+      <Card className="p-4 sm:p-5">
         {loading ? (
           <p className="text-sm text-muted-foreground">Loading...</p>
         ) : blogs.length === 0 ? (
           <p className="text-sm text-muted-foreground">No blog found.</p>
         ) : (
           <>
-            <table className="w-full text-sm">
-              <thead>
-                <tr className="border-b text-left text-xs uppercase text-muted-foreground">
-                  <th className="pb-2">Title</th>
-                  <th className="pb-2">Category</th>
-                  <th className="pb-2">Status</th>
-                  <th className="pb-2">Views</th>
-                  <th className="pb-2"></th>
-                </tr>
-              </thead>
-              <tbody>
-                {blogs.map((blog) => (
-                  <tr key={blog._id} className="border-b last:border-0">
-                    <td className="py-2.5">{blog.title}</td>
-                    <td className="py-2.5">{blog.category}</td>
-                    <td className="py-2.5">
-                      <Badge variant={blog.status === "published" ? "success" : "default"}>
-                        {blog.status}
-                      </Badge>
-                    </td>
-                    <td className="py-2.5 font-mono text-xs">{blog.views}</td>
-                    <td className="flex justify-end gap-2 py-2.5">
-                      <Link href={`/admin/blogs/${blog._id}/edit`} className={cn(buttonVariants({ variant: "outline", size: "sm" }))}>
-                        Edit
-                      </Link>
-                      <Button
-                        variant="destructive"
-                        size="sm"
-                        disabled={deletingId === blog._id}
-                        onClick={() => handleDelete(blog._id)}
-                      >
-                        {deletingId === blog._id ? "Deleting..." : "Delete"}
-                      </Button>
-                    </td>
+            {/* Card list on mobile */}
+            <div className="flex flex-col gap-3 sm:hidden">
+              {blogs.map((blog) => (
+                <div key={blog._id} className="rounded-lg border p-3">
+                  <p className="mb-1.5 text-sm font-medium leading-snug">
+                    {blog.title}
+                  </p>
+                  <div className="mb-3 flex flex-wrap items-center gap-2 text-xs text-muted-foreground">
+                    <Badge
+                      variant={blog.status === "published" ? "success" : "default"}
+                    >
+                      {blog.status}
+                    </Badge>
+                    <span>{blog.category}</span>
+                    <span className="font-mono">{blog.views} views</span>
+                  </div>
+                  <div className="flex gap-2">
+                    <Link
+                      href={`/admin/blogs/${blog._id}/edit`}
+                      className={cn(
+                        buttonVariants({ variant: "outline", size: "sm" }),
+                        "flex-1",
+                      )}
+                    >
+                      Edit
+                    </Link>
+                    <Button
+                      variant="destructive"
+                      size="sm"
+                      className="flex-1"
+                      disabled={deletingId === blog._id}
+                      onClick={() => handleDelete(blog._id)}
+                    >
+                      {deletingId === blog._id ? "Deleting..." : "Delete"}
+                    </Button>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            <div className="hidden overflow-x-auto sm:block">
+              <table className="w-full min-w-[560px] text-sm">
+                <thead>
+                  <tr className="border-b text-left text-xs uppercase text-muted-foreground">
+                    <th className="pb-2">Title</th>
+                    <th className="pb-2">Category</th>
+                    <th className="pb-2">Status</th>
+                    <th className="pb-2">Views</th>
+                    <th className="pb-2"></th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
+                </thead>
+                <tbody>
+                  {blogs.map((blog) => (
+                    <tr key={blog._id} className="border-b last:border-0">
+                      <td className="max-w-[280px] truncate py-2.5">
+                        {blog.title}
+                      </td>
+                      <td className="py-2.5">{blog.category}</td>
+                      <td className="py-2.5">
+                        <Badge
+                          variant={blog.status === "published" ? "success" : "default"}
+                        >
+                          {blog.status}
+                        </Badge>
+                      </td>
+                      <td className="py-2.5 font-mono text-xs">{blog.views}</td>
+                      <td className="flex justify-end gap-2 py-2.5">
+                        <Link
+                          href={`/admin/blogs/${blog._id}/edit`}
+                          className={cn(buttonVariants({ variant: "outline", size: "sm" }))}
+                        >
+                          Edit
+                        </Link>
+                        <Button
+                          variant="destructive"
+                          size="sm"
+                          disabled={deletingId === blog._id}
+                          onClick={() => handleDelete(blog._id)}
+                        >
+                          {deletingId === blog._id ? "Deleting..." : "Delete"}
+                        </Button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
 
             {totalPages > 1 && (
-              <div className="mt-5 flex items-center justify-end gap-3 text-sm">
-                <Button variant="outline" size="sm" disabled={page <= 1} onClick={() => setPage((p) => p - 1)}>
+              <div className="mt-5 flex flex-wrap items-center justify-center gap-3 text-sm sm:justify-end">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  disabled={page <= 1}
+                  onClick={() => setPage((p) => p - 1)}
+                >
                   ← Prev
                 </Button>
                 <span>

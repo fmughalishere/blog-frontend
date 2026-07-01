@@ -17,16 +17,18 @@ export default function PanelLayout({ children }: { children: React.ReactNode })
 
   if (loading || !user || user.role !== "admin") {
     return (
-      <div className="flex min-h-screen items-center justify-center text-sm text-muted-foreground">
+      <div className="flex min-h-screen items-center justify-center px-4 text-center text-sm text-muted-foreground">
         Loading...
       </div>
     );
   }
 
   return (
-    <div className="flex min-h-screen bg-secondary">
+    <div className="flex min-h-screen flex-col bg-secondary md:flex-row">
       <Sidebar />
-      <main className="max-w-5xl flex-1 p-10">{children}</main>
+      <main className="w-full max-w-5xl flex-1 p-4 sm:p-6 lg:p-10">
+        {children}
+      </main>
     </div>
   );
 }

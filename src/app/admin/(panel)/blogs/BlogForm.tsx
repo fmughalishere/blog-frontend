@@ -51,7 +51,7 @@ export default function BlogForm({ initialValues, onSubmit, loading, error, subm
         <Input value={form.title} onChange={(e) => update("title", e.target.value)} required />
       </div>
 
-      <div className="grid grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
         <div>
           <label className="mb-1.5 block text-sm font-semibold">Category</label>
           <Input value={form.category} onChange={(e) => update("category", e.target.value)} />
@@ -76,6 +76,17 @@ export default function BlogForm({ initialValues, onSubmit, loading, error, subm
           onChange={(e) => update("coverImage", e.target.value)}
           placeholder="https://..."
         />
+        {form.coverImage && (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img
+            src={form.coverImage}
+            alt="Cover preview"
+            className="mt-2 h-32 w-full rounded-md border border-input object-cover sm:h-40"
+            onError={(e) => {
+              (e.target as HTMLImageElement).style.display = "none";
+            }}
+          />
+        )}
       </div>
 
       <div>
@@ -95,8 +106,8 @@ export default function BlogForm({ initialValues, onSubmit, loading, error, subm
       <div>
         <label className="mb-1.5 block text-sm font-semibold">Content</label>
         <Textarea
-          rows={14}
-          className="font-mono text-sm"
+          rows={10}
+          className="font-mono text-sm sm:rows-14"
           value={form.content}
           onChange={(e) => update("content", e.target.value)}
           required
@@ -105,7 +116,7 @@ export default function BlogForm({ initialValues, onSubmit, loading, error, subm
 
       {error && <p className="text-sm text-destructive">{error}</p>}
 
-      <Button type="submit" disabled={loading}>
+      <Button type="submit" disabled={loading} className="w-full sm:w-auto">
         {loading ? "Saving..." : submitLabel}
       </Button>
     </form>

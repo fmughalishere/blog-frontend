@@ -27,11 +27,18 @@ export default function NewBlogPage() {
   return (
     <div>
       <div className="mb-6">
-        <p className="mb-1 font-mono text-xs uppercase tracking-widest text-muted-foreground">Content</p>
-        <h1 className="text-2xl font-bold">New blog</h1>
+        <p className="mb-1 font-mono text-xs uppercase tracking-widest text-muted-foreground">
+          Content
+        </p>
+        <h1 className="text-xl font-bold sm:text-2xl">New blog</h1>
       </div>
-      <Card className="p-6">
-        <BlogForm onSubmit={handleSubmit} loading={loading} error={error} submitLabel="Publish blog" />
+      <Card className="p-4 sm:p-6">
+        <BlogForm
+          onSubmit={handleSubmit}
+          loading={loading}
+          error={error}
+          submitLabel="Publish blog"
+        />
       </Card>
     </div>
   );
