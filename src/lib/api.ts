@@ -1,4 +1,4 @@
-const API_URL = process.env.NEXT_PUBLIC_API_URL || "https://blogs-backend-e4fi.onrender.com/api";
+const API_URL = process.env.NEXT_PUBLIC_API_URL || "https://blogs-apis-5mk5.onrender.com/api";
 
 interface RequestOptions extends RequestInit {
   json?: unknown;
