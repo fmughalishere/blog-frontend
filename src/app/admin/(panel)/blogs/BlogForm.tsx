@@ -5,7 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { api } from "@/lib/api";
-
+import { SITE_TYPE } from "@/lib/siteConfig";
 interface Props {
   initialValues?: {
     title?: string;
@@ -71,6 +71,7 @@ export default function BlogForm({ initialValues, onSubmit, loading, error, subm
     e.preventDefault();
     onSubmit({
       ...form,
+      siteType: SITE_TYPE,
       tags: form.tags.split(",").map((t) => t.trim()).filter(Boolean),
     });
   }

@@ -8,7 +8,7 @@ import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
 import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-
+import { SITE_TYPE } from "@/lib/siteConfig";
 export default function DashboardPage() {
   const [stats, setStats] = useState({
     total: 0,
@@ -22,9 +22,9 @@ export default function DashboardPage() {
   useEffect(() => {
     async function load() {
       const [allBlogs, published, draft, pendingComments] = await Promise.all([
-        api.get("/admin/blogs?limit=5"),
-        api.get("/admin/blogs?status=published&limit=1"),
-        api.get("/admin/blogs?status=draft&limit=1"),
+        api.get(`/admin/blogs?limit=${SITE_TYPE}`),
+        api.get(`/admin/blogs?status=published&limit=${SITE_TYPE}`),
+        api.get(`/admin/blogs?status=draft&limit=${SITE_TYPE}`),
         api.get("/admin/comments?status=pending"),
       ]);
 

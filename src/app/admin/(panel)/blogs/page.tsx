@@ -9,7 +9,7 @@ import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-
+import { SITE_TYPE } from "@/lib/siteConfig";
 const LIMIT = 20;
 
 export default function AdminBlogsPage() {
@@ -22,7 +22,7 @@ export default function AdminBlogsPage() {
 
   async function load(targetPage: number, query: string) {
     setLoading(true);
-    const params = new URLSearchParams({ limit: String(LIMIT), page: String(targetPage) });
+    const params = new URLSearchParams({ limit: String(LIMIT), page: String(targetPage), siteType: SITE_TYPE });
     if (query) params.set("search", query);
     const data = await api.get(`/admin/blogs?${params.toString()}`);
     setBlogs(data.blogs || []);

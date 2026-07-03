@@ -5,11 +5,12 @@ import { Badge } from "@/components/ui/badge";
 import { Blog } from "@/types";
 import FadeIn from "@/components/FadeIn";
 import CommentSection from "./CommentSection";
+import { SITE_TYPE } from "@/lib/siteConfig";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || "https://blogs-backend-e4fi.onrender.com/api";
 
 async function getBlog(slug: string): Promise<Blog | null> {
-  const res = await fetch(`${API_URL}/blogs/${slug}`, { cache: "no-store" });
+  const res = await fetch(`${API_URL}/blogs/${slug}?siteType=${SITE_TYPE}`, { cache: "no-store" });
   if (!res.ok) return null;
   const data = await res.json();
   return data.blog;

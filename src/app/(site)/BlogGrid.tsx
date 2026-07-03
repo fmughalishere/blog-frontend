@@ -10,6 +10,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { SITE_TYPE } from "@/lib/siteConfig";
 
 export default function BlogGrid({
   limit = 9,
@@ -34,6 +35,7 @@ export default function BlogGrid({
     });
     if (query) params.set("search", query);
     if (category) params.set("category", category);
+    params.set("siteType", SITE_TYPE);
     try {
       const data = await api.get(`/blogs?${params.toString()}`);
       setBlogs(data.blogs || []);

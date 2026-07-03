@@ -6,7 +6,7 @@ import { api } from "@/lib/api";
 import { Comment } from "@/types";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-
+import { SITE_TYPE } from "@/lib/siteConfig";
 export default function AdminCommentsPage() {
   const [comments, setComments] = useState<Comment[]>([]);
   const [loading, setLoading] = useState(true);
@@ -14,7 +14,7 @@ export default function AdminCommentsPage() {
 
   async function load() {
     setLoading(true);
-    const data = await api.get("/admin/comments?status=pending");
+    const data = await api.get(`/admin/comments?status=pending&siteType=${SITE_TYPE}`);
     setComments(data.comments || []);
     setLoading(false);
   }
